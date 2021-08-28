@@ -27,7 +27,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                await context.Response.WriteAsync("Hello World (Coding Militia)!");
             });
         }
     }
