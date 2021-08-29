@@ -1,4 +1,5 @@
-﻿using CodingMilitia.PlayBall.GroupManagement.Web.Models;
+﻿using CodingMilitia.PlayBall.GroupManagement.Web.Demo;
+using CodingMilitia.PlayBall.GroupManagement.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,15 +9,21 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
     [Route("groups")]
     public class GroupsController : Controller
     {
-        private static long currentGroupId = 1;
         private static IList<GroupViewModel> groups = new List<GroupViewModel>
         {
-            new GroupViewModel
-            {
-                Id = currentGroupId++,
-                Name = "Group 1 Name"
-            }
+            //new GroupViewModel
+            //{
+            //    Id = currentGroupId++,
+            //    Name = "Group 1 Name"
+            //}
         };
+
+        private readonly IGroupIdGenerator _groupIdGenerator;
+
+        public GroupsController(IGroupIdGenerator groupIdGenerator)
+        {
+            _groupIdGenerator = groupIdGenerator;
+        }
 
         [HttpGet]
         [Route("")]
@@ -81,7 +88,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
         {
             var group = new GroupViewModel
             {
-                Id = currentGroupId++,
+                Id = _groupIdGenerator.Next(),
                 Name = model.Name
             };
 
