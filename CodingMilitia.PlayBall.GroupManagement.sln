@@ -5,7 +5,11 @@ VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DAE72B9F-8A82-4370-9A3A-A363030DB231}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingMilitia.PlayBall.GroupManagement.Web", "src\CodingMilitia.PlayBall.GroupManagement.Web\CodingMilitia.PlayBall.GroupManagement.Web.csproj", "{6AC660D8-1911-45F2-BC5F-0F40C399C4DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodingMilitia.PlayBall.GroupManagement.Web", "src\CodingMilitia.PlayBall.GroupManagement.Web\CodingMilitia.PlayBall.GroupManagement.Web.csproj", "{6AC660D8-1911-45F2-BC5F-0F40C399C4DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingMilitia.PlayBall.GroupManagement.Business", "src\CodingMilitia.PlayBall.GroupManagement.Business\CodingMilitia.PlayBall.GroupManagement.Business.csproj", "{4B105571-E517-420E-8DA7-D735B9853E23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingMilitia.PlayBall.GroupManagement.Business.Impl", "src\CodingMilitia.PlayBall.GroupManagement.Business.Impl\CodingMilitia.PlayBall.GroupManagement.Business.Impl.csproj", "{C76A3B17-A8D3-4DD1-A334-127484BD67C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6AC660D8-1911-45F2-BC5F-0F40C399C4DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -32,8 +33,40 @@ Global
 		{6AC660D8-1911-45F2-BC5F-0F40C399C4DD}.Release|x64.Build.0 = Release|Any CPU
 		{6AC660D8-1911-45F2-BC5F-0F40C399C4DD}.Release|x86.ActiveCfg = Release|Any CPU
 		{6AC660D8-1911-45F2-BC5F-0F40C399C4DD}.Release|x86.Build.0 = Release|Any CPU
+		{4B105571-E517-420E-8DA7-D735B9853E23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B105571-E517-420E-8DA7-D735B9853E23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B105571-E517-420E-8DA7-D735B9853E23}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4B105571-E517-420E-8DA7-D735B9853E23}.Debug|x64.Build.0 = Debug|Any CPU
+		{4B105571-E517-420E-8DA7-D735B9853E23}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4B105571-E517-420E-8DA7-D735B9853E23}.Debug|x86.Build.0 = Debug|Any CPU
+		{4B105571-E517-420E-8DA7-D735B9853E23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B105571-E517-420E-8DA7-D735B9853E23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B105571-E517-420E-8DA7-D735B9853E23}.Release|x64.ActiveCfg = Release|Any CPU
+		{4B105571-E517-420E-8DA7-D735B9853E23}.Release|x64.Build.0 = Release|Any CPU
+		{4B105571-E517-420E-8DA7-D735B9853E23}.Release|x86.ActiveCfg = Release|Any CPU
+		{4B105571-E517-420E-8DA7-D735B9853E23}.Release|x86.Build.0 = Release|Any CPU
+		{C76A3B17-A8D3-4DD1-A334-127484BD67C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C76A3B17-A8D3-4DD1-A334-127484BD67C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C76A3B17-A8D3-4DD1-A334-127484BD67C8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C76A3B17-A8D3-4DD1-A334-127484BD67C8}.Debug|x64.Build.0 = Debug|Any CPU
+		{C76A3B17-A8D3-4DD1-A334-127484BD67C8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C76A3B17-A8D3-4DD1-A334-127484BD67C8}.Debug|x86.Build.0 = Debug|Any CPU
+		{C76A3B17-A8D3-4DD1-A334-127484BD67C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C76A3B17-A8D3-4DD1-A334-127484BD67C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C76A3B17-A8D3-4DD1-A334-127484BD67C8}.Release|x64.ActiveCfg = Release|Any CPU
+		{C76A3B17-A8D3-4DD1-A334-127484BD67C8}.Release|x64.Build.0 = Release|Any CPU
+		{C76A3B17-A8D3-4DD1-A334-127484BD67C8}.Release|x86.ActiveCfg = Release|Any CPU
+		{C76A3B17-A8D3-4DD1-A334-127484BD67C8}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6AC660D8-1911-45F2-BC5F-0F40C399C4DD} = {DAE72B9F-8A82-4370-9A3A-A363030DB231}
+		{4B105571-E517-420E-8DA7-D735B9853E23} = {DAE72B9F-8A82-4370-9A3A-A363030DB231}
+		{C76A3B17-A8D3-4DD1-A334-127484BD67C8} = {DAE72B9F-8A82-4370-9A3A-A363030DB231}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C3535139-BFF1-48C5-BA20-DA291BB2BB41}
 	EndGlobalSection
 EndGlobal

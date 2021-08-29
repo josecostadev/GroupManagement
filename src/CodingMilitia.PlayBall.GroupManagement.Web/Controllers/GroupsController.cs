@@ -1,60 +1,54 @@
-﻿using CodingMilitia.PlayBall.GroupManagement.Web.Demo;
+﻿using CodingMilitia.PlayBall.GroupManagement.Business.Services;
+using CodingMilitia.PlayBall.GroupManagement.Web.Mappings;
 using CodingMilitia.PlayBall.GroupManagement.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
 {
     [Route("groups")]
     public class GroupsController : Controller
     {
-        private static IList<GroupViewModel> groups = new List<GroupViewModel>
-        {
-            //new GroupViewModel
-            //{
-            //    Id = currentGroupId++,
-            //    Name = "Group 1 Name"
-            //}
-        };
+        private readonly IGroupsService _groupsService;
 
-        private readonly IGroupIdGenerator _groupIdGenerator;
-
-        public GroupsController(IGroupIdGenerator groupIdGenerator)
+        public GroupsController(IGroupsService groupsService)
         {
-            _groupIdGenerator = groupIdGenerator;
+            _groupsService = groupsService;
         }
 
         [HttpGet]
         [Route("")]
         public IActionResult Index()
         {
-            return View(groups);
+            var groups = _groupsService.GetAll();
+
+            return View(groups.ToViewModel());
         }
 
         [HttpGet]
         [Route("{id}")]
         public IActionResult Details(long id, string extra)
         {
-            var group = groups.SingleOrDefault(o => o.Id == id);
+            var group = _groupsService.GetById(id);
 
-            if(group == null)
+            if (group == null)
             {
                 return NotFound();
             }
 
-            if(!string.IsNullOrEmpty(extra))
+            var groupViewModel = group.ToViewModel();
+
+            if (!string.IsNullOrEmpty(extra))
             {
                 var newGroup = new GroupViewModel
                 {
-                    Id = group.Id,
+                    Id = groupViewModel.Id,
                     Name = $"{group.Name}. Extra: {extra}"
                 };
 
-                group = newGroup;
+                groupViewModel = newGroup;
             }
 
-            return View(group);
+            return View(groupViewModel);
         }
 
         [HttpPost]
@@ -62,14 +56,12 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(long id, GroupViewModel model)
         {
-            var group = groups.SingleOrDefault(o => o.Id == id);
+            var group = _groupsService.Update(model.ToServiceModel());
 
             if (group == null)
             {
                 return NotFound();
             }
-
-            group.Name = model.Name;
 
             return RedirectToAction("Index");
         }
@@ -86,13 +78,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(GroupViewModel model)
         {
-            var group = new GroupViewModel
-            {
-                Id = _groupIdGenerator.Next(),
-                Name = model.Name
-            };
-
-            groups.Add(group);
+            _groupsService.Add(model.ToServiceModel());
 
             return RedirectToAction("Index");
         }
