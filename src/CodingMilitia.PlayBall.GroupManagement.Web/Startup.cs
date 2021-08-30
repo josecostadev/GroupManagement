@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using CodingMilitia.PlayBall.GroupManagement.Web.Demo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -10,11 +12,29 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
 {
     public class Startup
     {
+        private readonly IConfiguration _config;
+
+        public Startup(IConfiguration config)
+        {
+            _config = config;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            // old configuration registration
+            //services.Configure<SomeRootConfiguration>(_configuration.GetSection("SomeRoot"));
+
+            // register a singleton populated from the config
+            //var someRootConfiguration = new SomeRootConfiguration();
+            //_config.GetSection("SomeRoot").Bind(someRootConfiguration);
+            //services.AddSingleton(someRootConfiguration);
+
+            services.ConfigurePOCO<SomeRootConfiguration>(_config.GetSection("SomeRoot"));
+            services.ConfigurePOCO<SecretsConfiguration>(_config.GetSection("DemoSecrets"));
 
             // Removed the default DI container
             //services.AddBusiness();

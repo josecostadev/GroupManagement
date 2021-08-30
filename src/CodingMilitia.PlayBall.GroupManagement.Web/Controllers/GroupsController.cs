@@ -1,7 +1,9 @@
 ﻿using CodingMilitia.PlayBall.GroupManagement.Business.Services;
+using CodingMilitia.PlayBall.GroupManagement.Web.Demo;
 using CodingMilitia.PlayBall.GroupManagement.Web.Mappings;
 using CodingMilitia.PlayBall.GroupManagement.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
 {
@@ -9,10 +11,17 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
     public class GroupsController : Controller
     {
         private readonly IGroupsService _groupsService;
+        private readonly SomeRootConfiguration _config;
+        private readonly SecretsConfiguration _secretsConfig;
 
-        public GroupsController(IGroupsService groupsService)
+        public GroupsController(
+            IGroupsService groupsService, 
+            SomeRootConfiguration config,
+            SecretsConfiguration secretsConfig)
         {
             _groupsService = groupsService;
+            _config = config;
+            _secretsConfig = secretsConfig;
         }
 
         [HttpGet]
