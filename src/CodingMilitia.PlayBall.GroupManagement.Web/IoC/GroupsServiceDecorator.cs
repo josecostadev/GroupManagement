@@ -36,7 +36,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.IoC
 
         public Group GetById(long id)
         {
-            _logger.LogTrace("##### {decoratedMethod}", nameof(GetById));
+            _logger.LogWarning("##### {decoratedMethod}", nameof(GetById));
             return _inner.GetById(id);
         }
 
