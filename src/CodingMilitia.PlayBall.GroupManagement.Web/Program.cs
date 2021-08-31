@@ -18,9 +18,28 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("##### Starting my application! #####");
-            ConfigureNLog();
-            CreateWebHostBuilder(args).Build().Run();
+            //Console.WriteLine("##### Starting my application! #####");
+            //ConfigureNLog();
+            //CreateWebHostBuilder(args).Build().Run();
+
+            // NLog: setup the logger first to catch all errors
+            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            try
+            {
+                logger.Debug("init main");
+                CreateWebHostBuilder(args).Build().Run();
+            }
+            catch (Exception ex)
+            {
+                //NLog: catch setup errors
+                logger.Error(ex, "Stopped program because of exception");
+                throw;
+            }
+            finally
+            {
+                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+                LogManager.Shutdown();
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
