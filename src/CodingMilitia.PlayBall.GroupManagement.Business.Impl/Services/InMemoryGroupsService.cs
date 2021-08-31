@@ -1,24 +1,31 @@
 ﻿using CodingMilitia.PlayBall.GroupManagement.Business.Models;
 using CodingMilitia.PlayBall.GroupManagement.Business.Services;
-using System;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CodingMilitia.PlayBall.GroupManagement.Business.Impl.Services
 {
     public class InMemoryGroupsService : IGroupsService
     {
         private readonly List<Group> _groups = new List<Group>();
+        private readonly ILogger<InMemoryGroupsService> _logger;
         private long currentId = 0;
+
+        public InMemoryGroupsService(ILogger<InMemoryGroupsService> logger)
+        {
+            _logger = logger;
+        }
 
         public IReadOnlyCollection<Group> GetAll()
         {
+            _logger.LogTrace("### Hello from {method}", nameof(GetAll));
             return _groups.AsReadOnly();
         }
 
         public Group GetById(long id)
         {
+            _logger.LogWarning("### Hello from {method}", nameof(GetById));
             return _groups.SingleOrDefault(o => o.Id == id);
         }
 

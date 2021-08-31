@@ -1,5 +1,6 @@
 ﻿using CodingMilitia.PlayBall.GroupManagement.Business.Impl.Services;
 using CodingMilitia.PlayBall.GroupManagement.Business.Services;
+using CodingMilitia.PlayBall.GroupManagement.Web.IoC;
 using Microsoft.Extensions.Configuration;
 using System;
 
