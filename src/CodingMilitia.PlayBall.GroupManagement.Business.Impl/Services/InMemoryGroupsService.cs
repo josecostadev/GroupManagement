@@ -3,6 +3,8 @@ using CodingMilitia.PlayBall.GroupManagement.Business.Services;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CodingMilitia.PlayBall.GroupManagement.Business.Impl.Services
 {
@@ -17,19 +19,21 @@ namespace CodingMilitia.PlayBall.GroupManagement.Business.Impl.Services
             _logger = logger;
         }
 
-        public IReadOnlyCollection<Group> GetAll()
+        public Task<IReadOnlyCollection<Group>> GetAllAsync(CancellationToken ct)
         {
-            _logger.LogTrace("### Hello from {method}", nameof(GetAll));
-            return _groups.AsReadOnly();
+            _logger.LogTrace("### Hello from {method}", nameof(GetAllAsync));
+            return Task.FromResult<IReadOnlyCollection<Group>>(_groups.AsReadOnly());
         }
 
-        public Group GetById(long id)
+        public async Task<Group> GetByIdAsync(long id, CancellationToken ct)
         {
-            _logger.LogWarning("### Hello from {method}", nameof(GetById));
+            _logger.LogWarning("### Hello from {method}", nameof(GetByIdAsync));
+            await Task.Delay(5000, ct);
+
             return _groups.SingleOrDefault(o => o.Id == id);
         }
 
-        public Group Update(Group group)
+        public Task<Group> UpdateAsync(Group group, CancellationToken ct)
         {
             var toUpdate = _groups.SingleOrDefault(o => o.Id == group.Id);
 
@@ -39,14 +43,14 @@ namespace CodingMilitia.PlayBall.GroupManagement.Business.Impl.Services
             }
 
             toUpdate.Name = group.Name;
-            return toUpdate;
+            return Task.FromResult(toUpdate);
         }
 
-        public Group Add(Group group)
+        public Task<Group> AddAsync(Group group, CancellationToken ct)
         {
             group.Id = ++currentId;
             _groups.Add(group);
-            return group;
+            return Task.FromResult(group);
         }
     }
 }

@@ -4,17 +4,18 @@ using CodingMilitia.PlayBall.GroupManagement.Web.Mappings;
 using CodingMilitia.PlayBall.GroupManagement.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
 {
+    //[DemoActionFilterAttribute]
+    //[ServiceFilter(typeof(DemoExceptionFilter))]
+    [DemoExceptionFilterFactory]
     [Route("groups")]
-    [DemoActionFilterAttribute]
-    [ServiceFilter(typeof(DemoExceptionFilter))]
-    [DemoExceptionFilterFactory()]
     public class GroupsController : Controller
     {
         private readonly IGroupsService _groupsService;
-
 
         public GroupsController(IGroupsService groupsService)
         {
@@ -23,18 +24,18 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
 
         [HttpGet]
         [Route("")]
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync(CancellationToken ct)
         {
-            var groups = _groupsService.GetAll();
+            var groups = await _groupsService.GetAllAsync(ct);
 
-            return View(groups.ToViewModel());
+            return View("Index", groups.ToViewModel());
         }
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult Details(long id, string extra)
+        public async Task<IActionResult> DetailsAsync(long id, string extra, CancellationToken ct)
         {
-            var group = _groupsService.GetById(id);
+            var group = await _groupsService.GetByIdAsync(id, ct);
 
             if (group == null)
             {
@@ -54,7 +55,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
                 groupViewModel = newGroup;
             }
 
-            return View(groupViewModel);
+            return View("Details", groupViewModel);
         }
 
         [HttpGet]
@@ -67,16 +68,16 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
         [HttpPost]
         [Route("{id}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(long id, GroupViewModel model)
+        public async Task<IActionResult> EditAsync(long id, GroupViewModel model, CancellationToken ct)
         {
-            var group = _groupsService.Update(model.ToServiceModel());
+            var group = await _groupsService.UpdateAsync(model.ToServiceModel(), ct);
 
             if (group == null)
             {
                 return NotFound();
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("IndexAsync");
         }
 
         [HttpGet]
@@ -89,11 +90,11 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
         [HttpPost]
         [Route("create")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(GroupViewModel model)
+        public async Task<IActionResult> CreateAsync(GroupViewModel model, CancellationToken ct)
         {
-            _groupsService.Add(model.ToServiceModel());
+            await _groupsService.AddAsync(model.ToServiceModel(), ct);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("IndexAsync");
         }
     }
 }
