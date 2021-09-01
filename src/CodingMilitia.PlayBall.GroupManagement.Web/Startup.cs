@@ -1,4 +1,5 @@
-﻿using CodingMilitia.PlayBall.GroupManagement.Web.Demo.Middlewares;
+﻿using CodingMilitia.PlayBall.GroupManagement.Web.Demo.Filters;
+using CodingMilitia.PlayBall.GroupManagement.Web.Demo.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -22,12 +23,12 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<DemoActionFilter>();
+            });
 
-            //services.ConfigurePOCO<SomeRootConfiguration>(_config.GetSection("SomeRoot"));
-            //services.ConfigurePOCO<SecretsConfiguration>(_config.GetSection("DemoSecrets"));
-
-            services.AddScoped<RequestTimingFactoryMiddleware>();
+            RegisterDependencies(services);
 
             // Removed the default DI container
             services.AddBusiness();
@@ -64,7 +65,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
                 });
             });
 
-            app.UseMiddleware<RequestTimingAdhocMiddleware>();
+            //app.UseMiddleware<RequestTimingAdhocMiddleware>();
 
             app.Use(async (context, next) =>
             {
@@ -85,6 +86,15 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
             {
                 await context.Response.WriteAsync("No middlewares could handle the request");
             });
+        }
+
+        private static void RegisterDependencies(IServiceCollection services)
+        {
+            //services.ConfigurePOCO<SomeRootConfiguration>(_config.GetSection("SomeRoot"));
+            //services.ConfigurePOCO<SecretsConfiguration>(_config.GetSection("DemoSecrets"));
+
+            services.AddScoped<RequestTimingFactoryMiddleware>();
+            services.AddTransient<DemoExceptionFilter>();
         }
     }
 }

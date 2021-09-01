@@ -1,11 +1,16 @@
 ﻿using CodingMilitia.PlayBall.GroupManagement.Business.Services;
+using CodingMilitia.PlayBall.GroupManagement.Web.Demo.Filters;
 using CodingMilitia.PlayBall.GroupManagement.Web.Mappings;
 using CodingMilitia.PlayBall.GroupManagement.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
 {
     [Route("groups")]
+    [DemoActionFilterAttribute]
+    [ServiceFilter(typeof(DemoExceptionFilter))]
+    [DemoExceptionFilterFactory()]
     public class GroupsController : Controller
     {
         private readonly IGroupsService _groupsService;
@@ -50,6 +55,13 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
             }
 
             return View(groupViewModel);
+        }
+
+        [HttpGet]
+        [Route("exception")]
+        public IActionResult GetException()
+        {
+            throw new ArgumentException("Some Argument Exception");
         }
 
         [HttpPost]
