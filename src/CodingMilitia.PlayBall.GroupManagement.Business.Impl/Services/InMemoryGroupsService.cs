@@ -21,14 +21,18 @@ namespace CodingMilitia.PlayBall.GroupManagement.Business.Impl.Services
 
         public Task<IReadOnlyCollection<Group>> GetAllAsync(CancellationToken ct)
         {
-            _logger.LogTrace("### Hello from {method}", nameof(GetAllAsync));
+            _logger.LogTrace("### Hello from {method} ###", nameof(GetAllAsync));
+
             return Task.FromResult<IReadOnlyCollection<Group>>(_groups.AsReadOnly());
         }
 
         public async Task<Group> GetByIdAsync(long id, CancellationToken ct)
         {
-            _logger.LogWarning("### Hello from {method}", nameof(GetByIdAsync));
-            await Task.Delay(5000, ct);
+            _logger.LogWarning("### Hello from {method} ###", nameof(GetByIdAsync));
+
+            await Task.Delay(10000, ct);
+
+            _logger.LogWarning("### After waiting {method} ###", nameof(GetByIdAsync));
 
             return _groups.SingleOrDefault(o => o.Id == id);
         }

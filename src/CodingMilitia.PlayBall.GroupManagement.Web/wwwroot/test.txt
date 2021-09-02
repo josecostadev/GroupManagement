@@ -1,1 +1,2 @@
 ﻿Hello from static resources!
+This is a txt file

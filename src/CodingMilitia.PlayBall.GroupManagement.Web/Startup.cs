@@ -25,7 +25,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
         {
             services.AddMvc(options =>
             {
-                options.Filters.Add<DemoActionFilter>();
+                //options.Filters.Add<DemoActionFilter>();
             });
 
             RegisterDependencies(services);
@@ -93,7 +93,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
             //services.ConfigurePOCO<SomeRootConfiguration>(_config.GetSection("SomeRoot"));
             //services.ConfigurePOCO<SecretsConfiguration>(_config.GetSection("DemoSecrets"));
 
-            services.AddScoped<RequestTimingFactoryMiddleware>();
+            services.AddTransient<RequestTimingFactoryMiddleware>();
             services.AddTransient<DemoExceptionFilter>();
         }
     }
