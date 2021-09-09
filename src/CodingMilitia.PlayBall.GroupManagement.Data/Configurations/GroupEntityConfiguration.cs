@@ -15,7 +15,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Data.Configurations
 
             builder
                 .Property(o => o.Id)
-                .UseNpgsqlSerialColumn();
+                .UseNpgsqlIdentityAlwaysColumn();
 
             builder
                 .Property(o => o.RowVersion)
