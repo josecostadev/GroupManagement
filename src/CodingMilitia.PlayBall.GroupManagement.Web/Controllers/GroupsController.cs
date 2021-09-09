@@ -12,6 +12,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
 {
     //[DemoExceptionFilterFactory]
     [Route("groups")]
+    [ApiController]
     public class GroupsController : ControllerBase
     {
         private readonly IGroupsService _groupsService;
@@ -76,7 +77,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateAsync(long id, [FromBody] GroupViewModel model, CancellationToken ct)
+        public async Task<IActionResult> UpdateAsync(long id, GroupViewModel model, CancellationToken ct)
         {
             model.Id = id; // not needed when uwe move to MediatR
             var updatedGroup = await _groupsService.UpdateAsync(model.ToServiceModel(), ct);
@@ -91,7 +92,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
 
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> AddAsync([FromBody] GroupViewModel model, CancellationToken ct)
+        public async Task<IActionResult> AddAsync(GroupViewModel model, CancellationToken ct)
         {
             model.Id = 0; // not needed when uwe move to MediatR
             var createdGroup = await _groupsService.AddAsync(model.ToServiceModel(), ct);

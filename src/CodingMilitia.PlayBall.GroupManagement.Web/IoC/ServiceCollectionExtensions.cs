@@ -3,6 +3,7 @@ using CodingMilitia.PlayBall.GroupManagement.Business.Services;
 using CodingMilitia.PlayBall.GroupManagement.Data;
 using CodingMilitia.PlayBall.GroupManagement.Web.Demo.Filters;
 using CodingMilitia.PlayBall.GroupManagement.Web.Demo.Middlewares;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -11,6 +12,14 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddRequiredMvcComponents(this IServiceCollection services)
+        {
+            var mvcBuilder = services.AddMvcCore();
+            mvcBuilder.AddJsonFormatters();
+            mvcBuilder.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            return services;
+        }
+
         public static IServiceCollection AddBusiness(this IServiceCollection services)
         {
             services.AddScoped<IGroupsService, GroupsService>();
@@ -45,12 +54,6 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddRequiredMvcComponents(this IServiceCollection services)
-        {
-            var mvcBuilder = services.AddMvcCore();
-            mvcBuilder.AddJsonFormatters();
-            return services;
-        }
 
         public static TConfig ConfigurePOCO<TConfig>(this IServiceCollection services, IConfiguration configuration) where TConfig : class, new()
         {

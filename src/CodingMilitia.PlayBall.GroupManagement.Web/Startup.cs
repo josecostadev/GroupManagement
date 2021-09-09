@@ -4,6 +4,7 @@ using CodingMilitia.PlayBall.GroupManagement.Web.Demo.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,7 @@ using NLog.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 
+[assembly: ApiController]
 namespace CodingMilitia.PlayBall.GroupManagement.Web
 {
     public class Startup
