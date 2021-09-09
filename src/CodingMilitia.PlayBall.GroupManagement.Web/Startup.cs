@@ -27,23 +27,12 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options =>
-            {
-                //options.Filters.Add<DemoActionFilter>();
-            });
-
-            RegisterDependencies(services);
+            services.AddRequiredMvcComponents();
 
             // Removed the default DI container
             services.AddBusiness();
-
-            services.AddDbContext<GroupManagementDbContext>(options =>
-            {
-                options.UseNpgsql(_config.GetConnectionString("GroupManagementDbContext"), npgsqlOptions =>
-                {
-                    options.EnableSensitiveDataLogging();
-                });
-            });
+            services.AddMisc();
+            services.AddDatabase(_config);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,24 +48,24 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
 
             #region Old
 
-            // Map when
-            app.MapWhen(context => context.Request.Headers.Keys.Any(o => o.StartsWith("map")), builder => 
-            {
-                builder.UseMiddleware<RequestTimingFactoryMiddleware>();
-                builder.Run(async context =>
-                {
-                    await context.Response.WriteAsync("pong from \"map when\" branch");
-                });
-            });
+            //// Map when
+            //app.MapWhen(context => context.Request.Headers.Keys.Any(o => o.StartsWith("map")), builder => 
+            //{
+            //    builder.UseMiddleware<RequestTimingFactoryMiddleware>();
+            //    builder.Run(async context =>
+            //    {
+            //        await context.Response.WriteAsync("pong from \"map when\" branch");
+            //    });
+            //});
 
-            // Map
-            app.Map("/ping", builder => { 
-                builder.UseMiddleware<RequestTimingFactoryMiddleware>();
-                builder.Run(async context =>
-                {
-                    await context.Response.WriteAsync("pong from map branch");
-                });
-            });
+            //// Map
+            //app.Map("/ping", builder => { 
+            //    builder.UseMiddleware<RequestTimingFactoryMiddleware>();
+            //    builder.Run(async context =>
+            //    {
+            //        await context.Response.WriteAsync("pong from map branch");
+            //    });
+            //});
 
             //app.UseMiddleware<RequestTimingAdhocMiddleware>();
 
@@ -101,16 +90,6 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
             {
                 await context.Response.WriteAsync("No middlewares could handle the request");
             });
-        }
-
-        private static void RegisterDependencies(IServiceCollection services)
-        {
-            //services.ConfigurePOCO<SomeRootConfiguration>(_config.GetSection("SomeRoot"));
-            //services.ConfigurePOCO<SecretsConfiguration>(_config.GetSection("DemoSecrets"));
-
-            services.AddTransient<RequestTimingFactoryMiddleware>();
-            services.AddTransient<DemoExceptionFilter>();
-            services.AddScoped<IGroupManagementDbContext, GroupManagementDbContext>();
         }
     }
 }

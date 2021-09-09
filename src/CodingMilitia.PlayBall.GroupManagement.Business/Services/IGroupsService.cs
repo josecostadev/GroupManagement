@@ -16,5 +16,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Business.Services
         Task<Group> UpdateAsync(Group group, CancellationToken ct);
 
         Task<Group> AddAsync(Group group, CancellationToken ct);
+
+        Task<Group> DeleteAsync(long id, CancellationToken ct);
     }
 }

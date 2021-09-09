@@ -26,7 +26,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Business.Impl.Services
         {
             _logger.LogTrace("### Hello from {method} ###", nameof(GetAllAsync));
 
-            var groups = await _dbContext.Groups.AsNoTracking().OrderByDescending(o => o.Id).ToListAsync();
+            var groups = await _dbContext.Groups.AsNoTracking().OrderByDescending(o => o.Id).ToListAsync(ct);
             return groups.ToService();
         }
 
@@ -44,10 +44,14 @@ namespace CodingMilitia.PlayBall.GroupManagement.Business.Impl.Services
 
             var toUpdate = _dbContext.Groups.SingleOrDefault(o => o.Id == group.Id);
             toUpdate.Name = group.Name;
-            toUpdate.RowVersion = uint.Parse(group.RowVersion);
+
+            if (group.RowVersion != null)
+            {
+                toUpdate.RowVersion = uint.Parse(group.RowVersion);
+            }
 
             //var updatedGroupEntry = _dbContext.Groups.Update(toUpdate);
-            //await _dbContext.DataContext.SaveChangesAsync();
+            //await _dbContext.DataContext.SaveChangesAsync(ct);
 
             _dbContext.DataContext.Entry(toUpdate).OriginalValues.SetValues(new Dictionary<string, object> { { "RowVersion", toUpdate.RowVersion } });
             await _dbContext.DataContext.SaveChangesAsync(ct);
@@ -62,6 +66,18 @@ namespace CodingMilitia.PlayBall.GroupManagement.Business.Impl.Services
             var entry = await _dbContext.Groups.AddAsync(group.ToEntity(), ct);
             await _dbContext.DataContext.SaveChangesAsync();
             return entry.Entity.ToService();
+        }
+
+        public async Task<Group> DeleteAsync(long id, CancellationToken ct)
+        {
+            var toDelete = _dbContext.Groups.SingleOrDefault(o => o.Id == id);
+
+            if (toDelete == null)
+                return default;
+
+            _dbContext.Groups.Remove(toDelete);
+            await _dbContext.DataContext.SaveChangesAsync(ct);
+            return toDelete.ToService();
         }
     }
 }

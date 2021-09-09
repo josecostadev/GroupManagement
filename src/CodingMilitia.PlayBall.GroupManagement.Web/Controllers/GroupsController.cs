@@ -12,7 +12,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
 {
     //[DemoExceptionFilterFactory]
     [Route("groups")]
-    public class GroupsController : Controller
+    public class GroupsController : ControllerBase
     {
         private readonly IGroupsService _groupsService;
         private readonly ILogger<GroupsController> _logger;
@@ -25,16 +25,16 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> IndexAsync(CancellationToken ct)
+        public async Task<IActionResult> GetAllAsync(CancellationToken ct)
         {
             var groups = await _groupsService.GetAllAsync(ct);
 
-            return View("Index", groups.ToViewModel());
+            return Ok(groups.ToViewModel());
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> DetailsAsync(long id, string extra, CancellationToken ct)
+        public async Task<IActionResult> GetByIdAsync(long id, string extra, CancellationToken ct)
         {
             try
             {
@@ -58,11 +58,11 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
                     groupViewModel = newGroup;
                 }
 
-                return View("Details", groupViewModel);
+                return Ok(groupViewModel);
             }
             catch (TaskCanceledException cancellationException)
             {
-                _logger.LogError("Task was canceled on {actionName}. Ex: {exception}", nameof(DetailsAsync), cancellationException);
+                _logger.LogError("Task was canceled on {actionName}. Ex: {exception}", nameof(UpdateAsync), cancellationException);
                 return Content("Task was canceled");
             }
         }
@@ -74,36 +74,43 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
             throw new ArgumentException("Some Argument Exception");
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("{id}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditAsync(long id, GroupViewModel model, CancellationToken ct)
+        public async Task<IActionResult> UpdateAsync(long id, [FromBody] GroupViewModel model, CancellationToken ct)
         {
-            var group = await _groupsService.UpdateAsync(model.ToServiceModel(), ct);
+            model.Id = id; // not needed when uwe move to MediatR
+            var updatedGroup = await _groupsService.UpdateAsync(model.ToServiceModel(), ct);
 
-            if (group == null)
+            if (updatedGroup == null)
             {
                 return NotFound();
             }
 
-            return RedirectToAction("IndexAsync");
-        }
-
-        [HttpGet]
-        [Route("create")]
-        public IActionResult Create()
-        {
-            return View();
+            return Ok(updatedGroup.ToViewModel());
         }
 
         [HttpPost]
-        [Route("create")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateAsync(GroupViewModel model, CancellationToken ct)
+        [Route("")]
+        public async Task<IActionResult> AddAsync([FromBody] GroupViewModel model, CancellationToken ct)
         {
-            await _groupsService.AddAsync(model.ToServiceModel(), ct);
+            model.Id = 0; // not needed when uwe move to MediatR
+            var createdGroup = await _groupsService.AddAsync(model.ToServiceModel(), ct);
 
-            return RedirectToAction("IndexAsync");
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = createdGroup.Id }, createdGroup.ToViewModel());
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteAsync(long id, CancellationToken ct)
+        {
+            var deletedGroup = await _groupsService.DeleteAsync(id, ct);
+            
+            if (deletedGroup == null)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }

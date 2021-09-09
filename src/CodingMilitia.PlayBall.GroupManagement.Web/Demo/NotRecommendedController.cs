@@ -47,7 +47,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web.Demo
             }
             catch (TaskCanceledException canceledException)
             {
-                _logger.LogError("File download canceled. Filename: {filename}", filename);
+                _logger.LogError("File download canceled. Filename: {filename}. Ex: {ex}", filename, canceledException);
                 return Content($"File download canceled. Filename: {filename}");
             }
             catch (Exception exception)

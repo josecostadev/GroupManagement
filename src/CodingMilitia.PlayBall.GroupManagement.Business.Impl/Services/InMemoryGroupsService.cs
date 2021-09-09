@@ -56,5 +56,10 @@ namespace CodingMilitia.PlayBall.GroupManagement.Business.Impl.Services
             _groups.Add(group);
             return Task.FromResult(group);
         }
+
+        public Task<Group> DeleteAsync(long id, CancellationToken ct)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
