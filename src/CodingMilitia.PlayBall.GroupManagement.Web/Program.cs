@@ -26,6 +26,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
             try
             {
                 logger.Debug("init main");
+
                 var host = CreateWebHostBuilder(args).Build();
 
                 await host.EnsureUpToDateAsync();

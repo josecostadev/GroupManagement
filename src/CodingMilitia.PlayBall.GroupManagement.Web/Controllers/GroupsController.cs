@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CodingMilitia.PlayBall.GroupManagement.Web.Controllers
 {
-    [DemoExceptionFilterFactory]
+    //[DemoExceptionFilterFactory]
     [Route("groups")]
     public class GroupsController : Controller
     {

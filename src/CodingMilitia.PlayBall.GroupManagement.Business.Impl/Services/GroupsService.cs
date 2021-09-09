@@ -41,12 +41,18 @@ namespace CodingMilitia.PlayBall.GroupManagement.Business.Impl.Services
         public async Task<Group> UpdateAsync(Group group, CancellationToken ct)
         {
             _logger.LogWarning("### Hello from {method} ###", nameof(UpdateAsync));
-            
-            group.Name = group.Name;
-            var toUpdate = group.ToEntity();
-            var updatedGroupEntry = _dbContext.Groups.Update(toUpdate);
-            await _dbContext.DataContext.SaveChangesAsync();
-            return updatedGroupEntry.Entity.ToService();
+
+            var toUpdate = _dbContext.Groups.SingleOrDefault(o => o.Id == group.Id);
+            toUpdate.Name = group.Name;
+            toUpdate.RowVersion = uint.Parse(group.RowVersion);
+
+            //var updatedGroupEntry = _dbContext.Groups.Update(toUpdate);
+            //await _dbContext.DataContext.SaveChangesAsync();
+
+            _dbContext.DataContext.Entry(toUpdate).OriginalValues.SetValues(new Dictionary<string, object> { { "RowVersion", toUpdate.RowVersion } });
+            await _dbContext.DataContext.SaveChangesAsync(ct);
+
+            return toUpdate.ToService();
         }
 
         public async Task<Group> AddAsync(Group group, CancellationToken ct)

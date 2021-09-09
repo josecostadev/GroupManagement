@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,6 +41,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
             {
                 options.UseNpgsql(_config.GetConnectionString("GroupManagementDbContext"), npgsqlOptions =>
                 {
+                    options.EnableSensitiveDataLogging();
                 });
             });
         }
@@ -53,6 +56,8 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
 
             // Middleware to serve static files - Short Circuit
             app.UseStaticFiles();
+
+            #region Old
 
             // Map when
             app.MapWhen(context => context.Request.Headers.Keys.Any(o => o.StartsWith("map")), builder => 
@@ -74,6 +79,8 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
             });
 
             //app.UseMiddleware<RequestTimingAdhocMiddleware>();
+
+            #endregion
 
             app.Use(async (context, next) =>
             {
