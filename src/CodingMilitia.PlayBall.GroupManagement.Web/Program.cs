@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CodingMilitia.PlayBall.GroupManagement.Web.StartupHelpers;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +17,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             Console.WriteLine("##### Starting my application! #####");
 
@@ -25,7 +26,11 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
             try
             {
                 logger.Debug("init main");
-                CreateWebHostBuilder(args).Build().Run();
+                var host = CreateWebHostBuilder(args).Build();
+
+                await host.EnsureUpToDateAsync();
+
+                host.Run();
             }
             catch (Exception ex)
             {

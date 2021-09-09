@@ -9,7 +9,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddBusiness(this IServiceCollection services)
         {
-            services.AddSingleton<IGroupsService, InMemoryGroupsService>();
+            services.AddScoped<IGroupsService, GroupsService>();
 
             // add more
 

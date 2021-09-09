@@ -1,8 +1,10 @@
-﻿using CodingMilitia.PlayBall.GroupManagement.Web.Demo.Filters;
+﻿using CodingMilitia.PlayBall.GroupManagement.Data;
+using CodingMilitia.PlayBall.GroupManagement.Web.Demo.Filters;
 using CodingMilitia.PlayBall.GroupManagement.Web.Demo.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
@@ -33,6 +35,12 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
             // Removed the default DI container
             services.AddBusiness();
 
+            services.AddDbContext<GroupManagementDbContext>(options =>
+            {
+                options.UseNpgsql(_config.GetConnectionString("GroupManagementDbContext"), npgsqlOptions =>
+                {
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,6 +103,7 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
 
             services.AddTransient<RequestTimingFactoryMiddleware>();
             services.AddTransient<DemoExceptionFilter>();
+            services.AddScoped<IGroupManagementDbContext, GroupManagementDbContext>();
         }
     }
 }
