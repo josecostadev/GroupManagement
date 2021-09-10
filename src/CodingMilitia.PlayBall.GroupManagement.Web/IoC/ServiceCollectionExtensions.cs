@@ -14,7 +14,11 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddRequiredMvcComponents(this IServiceCollection services)
         {
-            var mvcBuilder = services.AddMvcCore();
+            var mvcBuilder = services.AddMvcCore(options =>
+            {
+                options.Filters.Add<ConflictExceptionActionFilter>();
+            });
+
             mvcBuilder.AddJsonFormatters();
             mvcBuilder.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             return services;
