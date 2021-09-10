@@ -42,55 +42,67 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
         {
             if (env.IsDevelopment())
             {
+                // default is this, but we can do it differently: https://docs.microsoft.com/en-us/aspnet/core/web-api/handle-errors?view=aspnetcore-2.2
                 app.UseDeveloperExceptionPage();
             }
 
             // Middleware to serve static files - Short Circuit
             app.UseStaticFiles();
 
-            #region Old
+            //AddTestMiddlewares(app);
 
-            //// Map when
-            //app.MapWhen(context => context.Request.Headers.Keys.Any(o => o.StartsWith("map")), builder => 
-            //{
-            //    builder.UseMiddleware<RequestTimingFactoryMiddleware>();
-            //    builder.Run(async context =>
-            //    {
-            //        await context.Response.WriteAsync("pong from \"map when\" branch");
-            //    });
-            //});
-
-            //// Map
-            //app.Map("/ping", builder => { 
-            //    builder.UseMiddleware<RequestTimingFactoryMiddleware>();
-            //    builder.Run(async context =>
-            //    {
-            //        await context.Response.WriteAsync("pong from map branch");
-            //    });
-            //});
-
-            //app.UseMiddleware<RequestTimingAdhocMiddleware>();
-
-            #endregion
-
-            app.Use(async (context, next) =>
-            {
-                // OnStarting because if we write directly to the response
-                // it can already being streamed to the client.
-                context.Response.OnStarting(() =>
-                {
-                    context.Response.Headers.Add("X-Powered-By", "ASP.Net Core: From 0 to overkill.");
-                    return Task.CompletedTask;
-                });
-
-                await next.Invoke();
-            });
+            AddPoweredByHeaderMiddleware(app);
 
             app.UseMvc();
 
             app.Run(async context =>
             {
                 await context.Response.WriteAsync("No middlewares could handle the request");
+            });
+        }
+
+        private static void AddTestMiddlewares(IApplicationBuilder app)
+        {
+            // Map when
+            app.MapWhen(context => context.Request.Headers.Keys.Any(o => o.StartsWith("map")), builder =>
+            {
+                builder.UseMiddleware<RequestTimingFactoryMiddleware>();
+                builder.Run(async context =>
+                {
+                    await context.Response.WriteAsync("pong from \"map when\" branch");
+                });
+            });
+
+            // Map
+            app.Map("/ping", builder =>
+            {
+                builder.UseMiddleware<RequestTimingFactoryMiddleware>();
+                builder.Run(async context =>
+                {
+                    await context.Response.WriteAsync("pong from map branch");
+                });
+            });
+
+            app.UseMiddleware<RequestTimingAdhocMiddleware>();
+        }
+
+        private static void AddPoweredByHeaderMiddleware(IApplicationBuilder app)
+        {
+            app.Use(async (context, next) =>
+            {
+                // OnStarting because if we write directly to the response
+                // it can already being streamed to the client.
+                context.Response.OnStarting(() =>
+                {
+                    if (!context.Response.Headers.ContainsKey("X-Powered-By"))
+                    { 
+                        context.Response.Headers.Add("X-Powered-By", "ASP.Net Core: From 0 to overkill.");
+                    }
+
+                    return Task.CompletedTask;
+                });
+
+                await next.Invoke();
             });
         }
     }

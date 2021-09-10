@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var mvcBuilder = services.AddMvcCore(options =>
             {
-                options.Filters.Add<ConflictExceptionActionFilter>();
+                options.Filters.Add<ApiExceptionFilter>();
             });
 
             mvcBuilder.AddJsonFormatters();
