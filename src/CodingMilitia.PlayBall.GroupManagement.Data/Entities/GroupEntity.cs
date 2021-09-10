@@ -10,6 +10,8 @@ namespace CodingMilitia.PlayBall.GroupManagement.Data.Entities
 
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         // uint postgres specific. SQL server would be byte[]
         public uint RowVersion { get; set; }
     }
