@@ -49,8 +49,6 @@ namespace CodingMilitia.PlayBall.GroupManagement.Web
             // Middleware to serve static files - Short Circuit
             app.UseStaticFiles();
 
-            //AddTestMiddlewares(app);
-
             AddPoweredByHeaderMiddleware(app);
 
             app.UseMvc();
