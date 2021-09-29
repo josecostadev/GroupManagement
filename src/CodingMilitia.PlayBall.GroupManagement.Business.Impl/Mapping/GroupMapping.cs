@@ -15,13 +15,12 @@ namespace CodingMilitia.PlayBall.GroupManagement.Business.Impl.Mapping
 
         public static GroupEntity ToEntity(this Group serviceModel)
         {
-            return serviceModel != null ? new GroupEntity { Id = serviceModel.Id, Name = serviceModel.Name, RowVersion = serviceModel.RowVersion == null ? default : uint.Parse(serviceModel.RowVersion) } : null;
+            return serviceModel != null ? new GroupEntity { Id = serviceModel.Id, Name = serviceModel.Name, RowVersion = string.IsNullOrEmpty(serviceModel.RowVersion) ? default : uint.Parse(serviceModel.RowVersion) } : null;
         }
 
         public static IReadOnlyCollection<Group> ToService(this IReadOnlyCollection<GroupEntity> entityCollection)
         {
             return entityCollection.Map<GroupEntity, Group>(ToService);
         }
-
     }
 }
